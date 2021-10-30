@@ -4,6 +4,8 @@ const port = process.env.PORT || 4000;
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
+const ObjectId = require('mongodb').ObjectId;
+
 
 // Middleware
 app.use(cors());
@@ -25,6 +27,14 @@ async function run() {
             const tours = await cursor.toArray();
             res.send(tours);
         });
+
+        // GET Single Tour
+        app.get('/tours/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const tour = await toursCollection.findOne(query);
+            res.json(tour);
+        })
 
     }
     finally {
