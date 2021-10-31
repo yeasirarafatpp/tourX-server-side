@@ -21,6 +21,15 @@ async function run() {
         await client.connect();
         const database = client.db("Tourdestination");
         const toursCollection = database.collection("tours");
+
+        // POST API
+        app.post('/tours', async (req, res) => {
+            const tours = req.body;
+            console.log('post the hit api', tours);
+            const result = await toursCollection.insertOne(tours);
+            res.json(result);
+        })
+
         // GET API
         app.get('/tours', async (req, res) => {
             const cursor = toursCollection.find({});
