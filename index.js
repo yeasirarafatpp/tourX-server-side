@@ -21,6 +21,7 @@ async function run() {
         await client.connect();
         const database = client.db("Tourdestination");
         const toursCollection = database.collection("tours");
+        const orderCOllection = database.collection("order");
 
         // POST API
         app.post('/tours', async (req, res) => {
@@ -28,7 +29,21 @@ async function run() {
             console.log('post the hit api', tours);
             const result = await toursCollection.insertOne(tours);
             res.json(result);
-        })
+        });
+
+        // POST ORDER API
+        app.post('/order', async (req, res) => {
+            const order = req.body;
+            const result = await orderCOllection.insertOne(order);
+            res.json(result);
+        });
+
+        // GET ALL ORDER
+        app.get('/orders', async (req, res) => {
+            const cursor = orderCOllection.find({});
+            const orders = await cursor.toArray();
+            res.send(orders);
+        });
 
         // GET API
         app.get('/tours', async (req, res) => {
